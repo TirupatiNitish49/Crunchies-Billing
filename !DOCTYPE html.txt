@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crunchies - Billing System</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { width: 50%; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: left; }
+        .total { font-weight: bold; }
+        .bill { display: none; margin-top: 20px; border: 1px solid black; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Crunchies - Billing System</h1>
+        <label for="itemCode">Enter Item Code:</label>
+        <input type="text" id="itemCode" placeholder="Enter code">
+        <button onclick="addItem()">Add</button>
+        
+        <table id="billTable">
+            <tr>
+                <th>Item</th>
+                <th>Price (₹)</th>
+            </tr>
+        </table>
+        <p class="total">Total: ₹<span id="totalPrice">0</span></p>
+        <button onclick="printBill()">Print Bill</button>
+    </div>
+    
+    <div class="bill" id="billPrint">
+        <h2>Crunchies</h2>
+        <p id="billDetails"></p>
+        <p class="total">Total: ₹<span id="printTotal"></span></p>
+        <p>Thank you! Visit Again 😊</p>
+    </div>
+
+    <script>
+        let menu = {
+            11: { name: "French Fries", price: 120 },
+            30: { name: "Chicken Popcorn", price: 150 },
+            // Add more items as needed
+        };
+        let total = 0;
+
+        function addItem() {
+            let code = document.getElementById("itemCode").value;
+            if (menu[code]) {
+                let table = document.getElementById("billTable");
+                let row = table.insertRow(-1);
+                row.insertCell(0).innerText = menu[code].name;
+                row.insertCell(1).innerText = "₹" + menu[code].price;
+                total += menu[code].price;
+                document.getElementById("totalPrice").innerText = total;
+            } else {
+                alert("Invalid Item Code!");
+            }
+            document.getElementById("itemCode").value = "";
+        }
+
+        function printBill() {
+            let billDetails = "";
+            let rows = document.getElementById("billTable").rows;
+            for (let i = 1; i < rows.length; i++) {
+                billDetails += rows[i].cells[0].innerText + " - " + rows[i].cells[1].innerText + "<br>";
+            }
+            document.getElementById("billDetails").innerHTML = billDetails;
+            document.getElementById("printTotal").innerText = total;
+            document.getElementById("billPrint").style.display = "block";
+            window.print();
+        }
+    </script>
+</body>
+</html>
